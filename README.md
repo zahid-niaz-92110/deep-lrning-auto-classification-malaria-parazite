@@ -9,9 +9,9 @@ Data folder contains metadata, datasets imported in Notebooks fromt the repositr
 
 # 1. A Deep Learning Based Feature Fusion Method for Automatic Classification of Malaria Parasite using Blood Smear Images
 
-This robust malaria disease classification model from blood smear images is built using Convolutional Neural Networks (CNN). Leveraging powerful Python libraries such as TensorFlow, PIL, and scikit-learn, I've developed a model capable of accurately identifying parasites (infections) in blood smear images. This comprehensive approach includes preprocessing with NumPy and pandas, data visualization with Matplotlib and Seaborn, and efficient model training utilizing advanced CNN layers like Conv2D, MaxPooling2D, and Dense layers. 
+This robust malaria disease classification model from blood smear images is built using Convolutional Neural Networks (CNN). Leveraging powerful Python libraries such as TensorFlow, Keras, PIL, and scikit-learn, the model developed is capable of accurately identifying parasites (infections) in blood smear images. This comprehensive approach includes preprocessing with NumPy and pandas, data visualization with Matplotlib and Seaborn, and efficient model training utilizing advanced CNN layers like Conv2D, MaxPooling2D, Flatten, Dropout, and Dense layers. 
 
-Explore the intricacies of my approach, from data augmentation to early stopping, as I aim for precise diagnosis through cutting-edge image classification.
+Explore the intricacies of my approach, from data augmentation to early stopping, as I aim for precise diagnosis through cutting-edge image classification models based on deep learning techniques.
 
 ## Convlutional Neural Networks.
 
@@ -22,13 +22,13 @@ A CNN is a type of neural network that's really good at looking at pictures and 
 
 ## Data Exploration
 
-**Data set size:** 27558 samples of images which includes parasites and non-parasite cells. Below image is plotted using Python on the dataset.
+**Data set size:** 27558 samples of images which includes parasites and non-parasite cells. The image below is plotted using Python on the dataset.
 
 <img width="460" alt="image" src="https://github.com/hari255/Neural-Networks/assets/59302293/247ea202-56a1-45a4-a959-bec0e40e9bee">
 
-+ Infected cells have some form of disturbances within the cell with a dark color formation.
++ Infected/malaria parasitized cells have some form of disturbances within the cell, with a dark color formation.
 
-+ UnInfected cells have uniform color throughout the image.
++ Uninfected cells have a uniform color throughout the image.
 
 To accurately identify parasites in cell images and train our model to distinguish them, we must focus on the key aspects that differentiate these categories. This involves analyzing and understanding the unique characteristics and features that set each parasite apart. By doing so, we can ensure that our model is well-equipped to recognize and classify the various types of parasites accurately.
 
@@ -40,15 +40,15 @@ To accurately identify parasites in cell images and train our model to distingui
 <img width="392" alt="image" src="https://github.com/hari255/Neural-Networks/assets/59302293/e950ebaf-1cfe-4b4a-8e4f-14bf80222e60">
 
 
-**The mean image for both parasitized and uninfected are pretty much same because, the diffence between these two images are very small (infection is the only difference). The average image is obviously the larger part of it and how it seems most likely is the idea.**
+**The mean images for both parasitized and uninfected are pretty much the same because the difference between these two images is very small (infection is the only difference). The average image is obviously the larger part of it, and it seems most likely is the idea.**
 
 ## Data Transformation
 
-In the data transformation stage, I've tried to use multiple techniques used in Image procesing and Computer Vision and expereimenting with my dataset. These techinques are useful in different stages of Model building.
+In the data transformation stage, I've tried to use multiple techniques used in image processing and Computer Vision and experimenting with my dataset. These techniques are useful in different stages of model building.
 
 | Technique | Description |
 | ------ | ----------- |
-| RGB to HSV  | To seperate image brightness from color information |
+| RGB to HSV  | To separate image brightness from color information |
 | Gaussian smoothing | To remove noise from the image |
 | Data Augmentation   | To slightly alter the image and generate new one |
 
@@ -57,32 +57,32 @@ In the data transformation stage, I've tried to use multiple techniques used in 
 
 The purpose of converting RGB images to HSV (Hue, Saturation, Value) using OpenCV is to facilitate more effective image processing and analysis. The HSV color space separates image intensity (brightness) from color information, which can be particularly useful for various image processing tasks. 
 
-In the HSV color space, it's wasy to seperate colors based on their hue. This is useful for segmenting objects in an image based on color. This property helps us identify and differentiate te infected cell images.
+In the HSV color space, it's easy to separate colors based on their hue. This is useful for segmenting objects in an image based on color. This property helps us identify and differentiate the infected cell images.
 
-Plotted below image after converting from RBG to HSV, it's quite helpful in our problem to effeciently identify the parasite in HSV format.
+Plotted below image after converting from RGB to HSV, it is quite helpful in our problem to efficiently identify the parasite in HSV format.
 ![image](https://github.com/hari255/Neural-Networks/assets/59302293/f5ef2d2c-aa38-44c1-b787-5f5ad3a4c2fb)
 
 
 ## Gaussian Blurring
 
-**Gaussina Blurring or Smoothing is a technique that helps in removing noise from an image. It uses Gaussian kernel to weigh the neighboring pixels based on a Gaussian distribution.**
+**Gaussian Blurring or Smoothing is a technique that helps in removing noise from an image. It uses a Gaussian kernel to weigh the neighboring pixels based on a Gaussian distribution.**
 
 <img width="252" alt="image" src="https://github.com/hari255/Neural-Networks/assets/59302293/1165c5af-51d5-4173-950e-cc82a864bbb5">
 
 + (x,y) are the coordinates of the pixel.
 + σ is the standard deviation of the Gaussian distribution, which controls the amount of blurring.
 
-After Gaussian smoothing, the images looks like below
+After Gaussian smoothing, the images look like below
 
 ![image](https://github.com/hari255/Neural-Networks/assets/59302293/f20b57b9-ed30-4b57-89d7-f6d7ce55cf38)
 
 
 ## Model 
 
-**Considering the problem of detecting parasite, our model needs to have High `True positive` rate and low `false negative` rate.  If we manage to build such a model, then it would be appropriate for malaira classification. It is because we can't take any chances on the `False Negatives`, it means predecting uninfected when actually infected, which can lead to serious issues.**
+**Considering the problem of detecting parasites, our model needs to have a High `True positive` rate and a low `false negative` rate.  If we manage to build such a model, then it would be appropriate for malaria classification. It is because we can't take any chances on the `False Negatives`, which means predicting uninfected when actually infected, which can lead to serious issues.**
 
 
-`Python code for the model Architecure`
+`Python code for the model Architecture`
 ``` py
 from tensorflow.keras.layers import  BatchNormalization
 from tensorflow.keras import layers
