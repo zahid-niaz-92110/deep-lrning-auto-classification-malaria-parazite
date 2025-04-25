@@ -96,53 +96,105 @@ After Gaussian smoothing, the images look like below
 `Python code for the model Architecture`
 ``` py
 from tensorflow.keras.layers import  BatchNormalization
-from tensorflow.keras import layers
+from keras import layers
+from keras.layers import Dense
+from keras.layers import Conv2D
+from keras.layers import AveragePooling2D
+from keras.layers import Flatten
+from keras.layers import MaxPool2D
+from keras.layers import Input
+from keras.layers import BatchNormalization
+from keras.layers import Activation
+from keras.models import Model
+from keras.regularizers import l2
+
+
+def conv2d_bn(x, filters, kernel_size, weight_decay=.0, strides=(1, 1)):
+    layer = Conv2D(filters=filters,
+                   kernel_size=kernel_size,
+                   strides=strides,
+                   padding='same',
+                   use_bias=False,
+                   kernel_regularizer=l2(weight_decay)
+                   )(x)
+    layer = BatchNormalization()(layer)
+    return layer
+
+
+def conv2d_bn_relu(x, filters, kernel_size, weight_decay=.0, strides=(1, 1)):
+    layer = conv2d_bn(x, filters, kernel_size, weight_decay, strides)
+    layer = Activation('relu')(layer)
+    return layer
+
+
+def ResidualBlock(x, filters, kernel_size, weight_decay, downsample=True):
+    if downsample:
+        # residual_x = conv2d_bn_relu(x, filters, kernel_size=1, strides=2)
+        residual_x = conv2d_bn(x, filters, kernel_size=1, strides=2)
+        stride = 2
+    else:
+        residual_x = x
+        stride = 1
+    residual = conv2d_bn_relu(x,
+                              filters=filters,
+                              kernel_size=kernel_size,
+                              weight_decay=weight_decay,
+                              strides=stride,
+                              )
+    residual = conv2d_bn(residual,
+                         filters=filters,
+                         kernel_size=kernel_size,
+                         weight_decay=weight_decay,
+                         strides=1,
+                         )
+    out = layers.add([residual_x, residual])
+    out = Activation('relu')(out)
+    return out
+
+
+def ResNet18(classes, input_shape, weight_decay=1e-4):
+    input = Input(shape=input_shape)
+    x = input
+    # x = conv2d_bn_relu(x, filters=64, kernel_size=(7, 7), weight_decay=weight_decay, strides=(2, 2))
+    # x = MaxPool2D(pool_size=(3, 3), strides=(2, 2),  padding='same')(x)
+    x = conv2d_bn_relu(x, filters=64, kernel_size=(3, 3), weight_decay=weight_decay, strides=(1, 1))
+
+    # # conv 2
+    x = ResidualBlock(x, filters=64, kernel_size=(3, 3), weight_decay=weight_decay, downsample=False)
+    x = ResidualBlock(x, filters=64, kernel_size=(3, 3), weight_decay=weight_decay, downsample=False)
+    # # conv 3
+    x = ResidualBlock(x, filters=128, kernel_size=(3, 3), weight_decay=weight_decay, downsample=True)
+    x = ResidualBlock(x, filters=128, kernel_size=(3, 3), weight_decay=weight_decay, downsample=False)
+    # # conv 4
+    x = ResidualBlock(x, filters=256, kernel_size=(3, 3), weight_decay=weight_decay, downsample=True)
+    x = ResidualBlock(x, filters=256, kernel_size=(3, 3), weight_decay=weight_decay, downsample=False)
+    # # conv 5
+    x = ResidualBlock(x, filters=512, kernel_size=(3, 3), weight_decay=weight_decay, downsample=True)
+    x = ResidualBlock(x, filters=512, kernel_size=(3, 3), weight_decay=weight_decay, downsample=False)
+    x = AveragePooling2D(pool_size=(4, 4), padding='valid')(x)
+    x = Flatten()(x)
+    x = Dense(classes, activation='sigmoid')(x)
+    model = Model(input, x, name='ResNet18')
+    return model
+
+from keras import losses
 from keras import optimizers
-from tensorflow.keras.optimizers import Adam
 
+weight_decay = 1e-4
+lr = 1e-1
+num_classes = 1
+resnet18 = ResNet18(input_shape=(110, 110, 3), classes=num_classes, weight_decay=weight_decay)
+opt = optimizers.SGD(lr=lr, momentum=0.9, nesterov=False)
+resnet18.compile(optimizer=opt,
+                 loss=losses.binary_crossentropy,
+                 metrics=['accuracy'])
+resnet18.summary()
 
-
-final_model = Sequential()
-
-# Build the model here and add new layers
-
-final_model.add(Conv2D(filters = 128, kernel_size = (2,2), strides = (1,1), padding = "same", activation = "relu", input_shape = (64, 64, 3)))
-final_model.add(MaxPooling2D(pool_size = 2))
-
-
-final_model.add(Conv2D(filters = 128, kernel_size =(2,2), strides = (1,1), padding = "same", activation = "relu"))
-
-final_model.add(MaxPooling2D(pool_size = 2))
-
-
-final_model.add(Conv2D(filters = 128, kernel_size = (2,2), strides =(1,1), padding = "valid", activation = "relu"))
-
-final_model.add(MaxPooling2D(pool_size = 2))
-
-final_model.add(Dropout(0.2))
-
-final_model.add(Conv2D(filters = 64, kernel_size =(2,2), strides = (1,1), padding = "same", activation = "relu"))
-
-final_model.add(MaxPooling2D(pool_size = 2))
-
-
-final_model.add(Dropout(0.2))
-
-final_model.add(Conv2D(filters = 32, kernel_size = (2,2), padding = "same", activation = "relu"))
-
-final_model.add(MaxPooling2D(pool_size = 2))
-
-final_model.add(Dropout(0.2))
-
-final_model.add(Flatten())
-
-final_model.add(Dense(512, activation = "relu"))
-final_model.add(Dense(256, activation = "relu"))
-final_model.add(Dense(256, activation = "relu"))
-
-final_model.add(Dense(2, activation = "softmax")) # 2 represents output layer neurons
-
-final_model.summary()
+# Training the model on the input data by using the fit_generator function 
+history = resnet18.fit_generator(train_generator, steps_per_epoch = total_train // batch_size, 
+                       epochs = epochs, 
+                       validation_data = validation_generator, 
+                       validation_steps = total_val // batch_size) 
 
 ```
      
