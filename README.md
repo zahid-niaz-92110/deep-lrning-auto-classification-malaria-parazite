@@ -13,13 +13,14 @@ This robust malaria disease classification model from blood smear images is buil
 
 Explore the intricacies of my approach, from data augmentation to early stopping, as I aim for precise diagnosis through cutting-edge image classification models based on deep learning techniques.
 
-## Convlutional Neural Networks.
+## Convolutional Neural Networks.
 
 A CNN is a type of neural network that's really good at looking at pictures and figuring out what's in them. This specific model is set up to look at images that are 64x64 pixels with 3 color channels (red, green, blue) and decide between categories.
 
 ![image](https://github.com/hari255/Neural-Networks/assets/59302293/6be05b5d-6bf4-4a45-b2dd-fb604d538060)
 
-Prerequisites
+## Prerequisites.
+
 Keras 2.2.0
 Tensorflow-GPU 1.9.0
 Scikit-Learn
