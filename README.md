@@ -205,8 +205,33 @@ Team, Keras. (2016). Keras Documentation: VGG16 and VGG19. https://keras.io/api/
 
 ## Pre-trained CNN models
 
-We also evaluated the performance of pre-trained CNN models including VGG-16 and ResNet-50V2 towards extracting the features from the parasitized and uninfected cells. The feature extraction layers of these models were frozen, while the dense (fully connected) layers were retrained on the malaria cell image dataset. The pre-trained models could not perform well than the proposed feature fusion model in terms of precision, recall, f1 and accuracy scores.
+We also evaluated the performance of pre-trained CNN models including VGG-16 and ResNet-50V2 towards extracting the features from the parasitized and uninfected cells. The feature extraction layers of these models were frozen, while the dense (fully connected) layers were retrained on the malaria cell image dataset. The pre-trained models could not perform well than the proposed feature fusion model in terms of precision, recall, f1 and accuracy scores. The following is a code of the ResNet50V2, a pre-trained CNN model used for malaria parasite classification.
 
+from keras.applications.resnet_v2 import ResNet50V2
+image_input_shape = Input(shape=(110, 110, 3))
+resnetv2 = ResNet50V2(input_tensor=image_input_shape, include_top=False, weights='imagenet')
+
+for layer in resnetv2.layers:
+    layer.trainable = False
+
+# defining input and output to the model
+x = Flatten()(resnetv2.output)
+prediction = Dense(1, activation='sigmoid')(x)
+
+model = Model(inputs = resnetv2.input, outputs = prediction)
+model.summary()
+
+metrics = ['accuracy']
+model.compile(
+  loss='binary_crossentropy',
+  optimizer='adam',
+  metrics=metrics
+)
+# Training the model on the input data by using the fit_generator function 
+history = model.fit_generator(train_generator, steps_per_epoch = total_train // batch_size, 
+                       epochs = epochs, 
+                       validation_data = validation_generator, 
+                       validation_steps = total_val // batch_size) 
 
 ---------------------------------------------------------
 ---------------------------------------------------------
