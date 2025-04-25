@@ -7,7 +7,7 @@
 Data folder contains metadata, datasets imported in Notebooks fromt the repositry, sample images and information realted to datsets.
 
 
-# 1. A Deep Learning Based Feature Fusion Method for Automatic Classification of Malaria Parasite using Blood Smear Images
+# A Deep Learning Based Feature Fusion Method for Automatic Classification of Malaria Parasite using Blood Smear Images
 
 This robust malaria disease classification model from blood smear images is built using Convolutional Neural Networks (CNN). Leveraging powerful Python libraries such as TensorFlow, Keras, PIL, and scikit-learn, the model developed is capable of accurately identifying parasites (infections) in blood smear images. This comprehensive approach includes preprocessing with NumPy and pandas, data visualization with Matplotlib and Seaborn, and efficient model training utilizing advanced CNN layers like Conv2D, MaxPooling2D, Flatten, Dropout, and Dense layers. 
 
