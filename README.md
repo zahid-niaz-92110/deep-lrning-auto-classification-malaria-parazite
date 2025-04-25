@@ -227,12 +227,15 @@ model = Model(inputs = resnetv2.input, outputs = prediction)
 model.summary()
 
 metrics = ['accuracy']
+
 model.compile(
   loss='binary_crossentropy',
   optimizer='adam',
   metrics=metrics
 )
-#Training the model on the input data by using the fit_generator function 
+
+**Training the model on the input data by using the fit_generator function 
+
 history = model.fit_generator(train_generator, steps_per_epoch = total_train // batch_size, 
                        epochs = epochs, 
                        validation_data = validation_generator, 
