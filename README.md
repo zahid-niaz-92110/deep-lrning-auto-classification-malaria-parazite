@@ -214,7 +214,7 @@ resnetv2 = ResNet50V2(input_tensor=image_input_shape, include_top=False, weights
 for layer in resnetv2.layers:
     layer.trainable = False
 
-# defining input and output to the model
+#defining input and output to the model
 x = Flatten()(resnetv2.output)
 prediction = Dense(1, activation='sigmoid')(x)
 
@@ -227,7 +227,7 @@ model.compile(
   optimizer='adam',
   metrics=metrics
 )
-# Training the model on the input data by using the fit_generator function 
+#Training the model on the input data by using the fit_generator function 
 history = model.fit_generator(train_generator, steps_per_epoch = total_train // batch_size, 
                        epochs = epochs, 
                        validation_data = validation_generator, 
