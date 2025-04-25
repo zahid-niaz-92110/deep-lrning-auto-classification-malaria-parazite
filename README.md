@@ -153,6 +153,10 @@ VGG16 model; https://keras.io/api/applications/vgg/
 
 Team, Keras. (2016). Keras Documentation: VGG16 and VGG19. https://keras.io/api/applications/vgg/
 
+## Pre-trained CNN models
+
+We also evaluated the performance of pre-trained CNN models including VGG-16 and ResNet-50V2 towards extracting the features from the parasitized and uninfected cells. The feature extraction layers of these models were frozen, while the dense (fully connected) layers were retrained on the malaria cell image dataset. The pre-trained models could not perform well than the proposed feature fusion model in terms of precision, recall, f1 and accuracy scores.
+
 
 ---------------------------------------------------------
 ---------------------------------------------------------
