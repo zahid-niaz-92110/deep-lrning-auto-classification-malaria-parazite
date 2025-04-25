@@ -107,7 +107,8 @@ from keras.layers import BatchNormalization
 from keras.layers import Activation
 from keras.models import Model
 from keras.regularizers import l2
-
+from keras import losses
+from keras import optimizers
 
 def conv2d_bn(x, filters, kernel_size, weight_decay=.0, strides=(1, 1)):
     layer = Conv2D(filters=filters,
@@ -176,9 +177,6 @@ def ResNet18(classes, input_shape, weight_decay=1e-4):
     x = Dense(classes, activation='sigmoid')(x)
     model = Model(input, x, name='ResNet18')
     return model
-
-from keras import losses
-from keras import optimizers
 
 weight_decay = 1e-4
 lr = 1e-1
