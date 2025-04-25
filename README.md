@@ -22,9 +22,13 @@ A CNN is a type of neural network that's really good at looking at pictures and 
 ## Prerequisites.
 
 Keras 2.2.0
+
 Tensorflow-GPU 1.9.0
+
 Scikit-Learn
+
 PIL
+
 Matplotlib and Seaborn
 
 ## Data Exploration
