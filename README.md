@@ -19,10 +19,16 @@ A CNN is a type of neural network that's really good at looking at pictures and 
 
 ![image](https://github.com/hari255/Neural-Networks/assets/59302293/6be05b5d-6bf4-4a45-b2dd-fb604d538060)
 
+Prerequisites
+Keras 2.2.0
+Tensorflow-GPU 1.9.0
+Scikit-Learn
+PIL
+Matplotlib and Seaborn
 
 ## Data Exploration
 
-**Data set size:** 27558 samples of images which includes parasites and non-parasite cells. The image below is plotted using Python on the dataset.
+**Data set size:** 27558 samples of images, which include parasites and non-parasite cells. The image below is plotted using Python on the dataset.
 
 <img width="460" alt="image" src="https://github.com/hari255/Neural-Networks/assets/59302293/247ea202-56a1-45a4-a959-bec0e40e9bee">
 
