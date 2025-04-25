@@ -179,10 +179,10 @@ def ResNet18(classes, input_shape, weight_decay=1e-4):
     return model
 
 weight_decay = 1e-4
-lr = 1e-1
+lr = 0.005
 num_classes = 1
 resnet18 = ResNet18(input_shape=(110, 110, 3), classes=num_classes, weight_decay=weight_decay)
-opt = optimizers.SGD(lr=lr, momentum=0.9, nesterov=False)
+opt = optimizers.Adam(learning_rate=lr)
 resnet18.compile(optimizer=opt,
                  loss=losses.binary_crossentropy,
                  metrics=['accuracy'])
@@ -197,7 +197,7 @@ history = resnet18.fit_generator(train_generator, steps_per_epoch = total_train 
 ```
      
 ---
-
+During experiments, different optimizers were used, however, the best accuracy was achieved with the Adam optimizer at the initial learning rate of 0.005. The binary_crossentroy was used as a loss function.
 To benchmark my innovative approach, I've conducted a comprehensive performance analysis against the renowned VGG16 image-detection model. The findings not only highlight the superiority of my model but also shed light on key metrics that set it apart.
 VGG16 model; https://keras.io/api/applications/vgg/ 
 
